@@ -2,6 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import { NavBar } from './NavBar';
 import logo from '../assets/fetch.png';
+import { useAuth } from '../contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -9,6 +11,10 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+  const isLoginPage = router.pathname === '/';
+
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -28,7 +34,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             </div>
           </nav>
         </header>
-        <NavBar />
+        {isAuthenticated && !isLoginPage && <NavBar />}
         {title && (
           <div className="bg-white p-4 rounded-lg shadow-lg">
             <h1 className="text-2xl font-bold text-gray-900">{title}</h1>

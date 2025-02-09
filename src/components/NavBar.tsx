@@ -17,6 +17,17 @@ export const NavBar: React.FC<NavBarProps> = () => {
   const { favorites } = useFavoriteStore();
   const { user, logout } = useAuth();
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast.success('Logged out successfully');
+      router.push('/'); // Navigate to login page
+    } catch (error) {
+      toast.error('Failed to logout');
+      console.error('Logout error:', error);
+    }
+  };
+
   const handleGenerateMatch = async () => {
     if (favorites.length === 0) {
       toast.error('Please favorite some dogs first!');
@@ -84,10 +95,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
         <div className="flex items-center gap-4 pl-4 border-l border-gray-200">
           <span className="text-gray-700">{user?.name}</span>
           <button
-            onClick={() => {
-              logout();
-              toast.success('Logged out successfully');
-            }}
+            onClick={handleLogout}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
             title="Logout"
           >
